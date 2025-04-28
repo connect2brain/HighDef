@@ -1,14 +1,31 @@
-DO_STREAMLINES = true;
+DO_STREAMLINES = false;
+
+SPLIT_PATH = ""; % /first_half
+
+STORAGE = "D:/HighDef-operate/HighDef";
+
+IDs = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub-008", "sub-009", "sub-011", "sub-012","sub-013", "sub-014", "sub-015", "sub-016", "sub-017", "sub-019", "sub-022", "sub-023"];
+
+R2s = [];
+R2s.R.hot.ADM  = nan(size(IDs));
+R2s.R.hot.FDI  = nan(size(IDs));
+R2s.R.hot.APB  = nan(size(IDs));
+R2s.R.cold.FDI = nan(size(IDs));
+R2s.L.hot.ADM  = nan(size(IDs));
+R2s.L.hot.FDI  = nan(size(IDs));
+R2s.L.hot.APB  = nan(size(IDs));
+R2s.L.cold.FDI = nan(size(IDs));
 
 
 
-for ID = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub-008", "sub-009", "sub-011", "sub-012","sub-013", "sub-014"]
+for iID = 1:length(IDs)
+    ID = IDs(iID);
     for exp_id = ["R2L", "L2R"]
         hemisphere = extractBefore(exp_id, "2");
         mesh_id = 'mesh0';
 
         roi = sprintf('midlayer_%s', lower(hemisphere));
-        ROOT = sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s', ID, exp_id);
+        ROOT = sprintf('%s/%s/results/exp_map-%s', STORAGE, ID, exp_id);
         R2_PATH = sprintf('%s/r2/mesh_%s/roi_%s', ROOT, mesh_id, roi);
 
         templates = [];
@@ -23,19 +40,26 @@ for ID = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub
 
 
         for muscle = ["ADM", "FDI", "APB"]
-            for spot = ["hot", "cold"]
+            spotlist = ["hot"];
+            if strcmpi(muscle, "FDI")
+                spotlist = ["hot", "cold"];
+            end
+
+            for spot = spotlist
+                fprintf("%s %s\n", muscle, spot)
                 figure;
-                [~, max_loc, bestMatch, maxR2, corners] = plot_R2_map(sprintf('%s/%s/sigmoid4', R2_PATH, sprintf(templates.(spot), muscle)), true, 'mag');
+                [~, max_loc, bestMatch, maxR2, corners] = plot_R2_map(sprintf('%s/%s/sigmoid4%s', R2_PATH, sprintf(templates.(spot), muscle), SPLIT_PATH), true, 'mag');
                 close all;
                 spots.(spot).(muscle).max_loc = max_loc';
                 spots.(spot).(muscle).max_ind = bestMatch;
                 spots.(spot).(muscle).max_R2 = maxR2;
                 spots.(spot).(muscle).normal = double(cross(corners(:,2)-corners(:,1), corners(:,3)-corners(:,1))');
                 spots.(spot).(muscle).normal = spots.(spot).(muscle).normal ./ norm(spots.(spot).(muscle).normal);
+                R2s.(hemisphere).(spot).(muscle)(iID) = maxR2;
             end
 
             figure;
-            S1_path = sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/%s/sigmoid4', ID, hemisphere, mesh_id, roi, sprintf(templates.("hot"), muscle));
+            S1_path = sprintf('%s/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/%s/sigmoid4', STORAGE, ID, hemisphere, mesh_id, roi, sprintf(templates.("hot"), muscle));
             [~, max_loc, bestMatch, maxR2, corners] = plot_R2_map(S1_path, true, 'mag');
             close all;
             S1hotspots.(muscle).max_loc = max_loc';
@@ -105,7 +129,7 @@ for ID = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub
 
 
 
-        geo_file = sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/mesh/roi/%s/geo.hdf5', ID, roi);
+        geo_file = sprintf('%s/%s/mesh/roi/%s/geo.hdf5', STORAGE, ID, roi);
         coordinates = h5read(geo_file, '/mesh/nodes/node_coord');
         triangles = h5read(geo_file, '/mesh/elm/triangle_number_list')' + 1;
 
@@ -125,8 +149,8 @@ for ID = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub
 
         % Pick top 5 % of triangles from hotspot FDI, plot in red; pick top 5 % of
         % triangles from coldspot FDI, color blue; color intersection purple.
-        hotspot_data = h5read(sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/CsE_FDI_in_uV/sigmoid4/r2_roi_data.hdf5', ID, exp_id, mesh_id, roi), '/data/tris/c_E_mag');
-        coldspot_data = h5read(sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/SIHIscore_FDI/sigmoid4/r2_roi_data.hdf5', ID, exp_id, mesh_id, roi), '/data/tris/c_E_mag');
+        hotspot_data  = h5read(sprintf('%s/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/CsE_FDI_in_uV/sigmoid4%s/r2_roi_data.hdf5', STORAGE, ID, exp_id, mesh_id, roi, SPLIT_PATH), '/data/tris/c_E_mag');
+        coldspot_data = h5read(sprintf('%s/%s/results/exp_map-%s/r2/mesh_%s/roi_%s/SIHIscore_FDI/sigmoid4%s/r2_roi_data.hdf5', STORAGE, ID, exp_id, mesh_id, roi, SPLIT_PATH), '/data/tris/c_E_mag');
 
         hotspot_data(isnan(hotspot_data)) = 0;
         hotspot_data = reject_R2_outliers_if_needed(hotspot_data);
@@ -308,9 +332,9 @@ for ID = ["sub-001", "sub-002", "sub-003", "sub-004", "sub-006", "sub-007", "sub
 
         fontsize(fig, scale=1.5)
         if DO_STREAMLINES
-            exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/AllSpots-Figures/all_spots_streamlines_%s_%s.pdf', ID, hemisphere))
+            exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/AllSpots-Figures%s/all_spots_streamlines_%s_%s.pdf', SPLIT_PATH, ID, hemisphere))
         else
-            exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/AllSpots-Figures/all_spots_%s_%s.pdf', ID, hemisphere))
+            exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/AllSpots-Figures%s/all_spots_%s_%s.pdf', SPLIT_PATH, ID, hemisphere))
         end
 
         close all

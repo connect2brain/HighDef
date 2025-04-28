@@ -48,7 +48,8 @@ SUBJECT = flip(SUBJECT);
 ID = sprintf('sub-%s', SUBJECT);
 
 
-T = readtable('//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx');
+%T = readtable('//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx');
+T = readtable('C:/Users/BNP Lab/Documents/HighDef-temp/Planning.csv');
 subjectRow = T(strcmpi(T.Subject, ID), :);
 
 whichSession = input('Which mapping session [1,2] > ');

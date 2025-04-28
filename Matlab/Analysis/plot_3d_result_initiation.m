@@ -1,4 +1,4 @@
-ID = 'sub-014';
+ID = 'sub-022';
 hemisphere = 'R';
 roi = sprintf('midlayer_%s', lower(hemisphere));
 suffix = '';
@@ -53,11 +53,6 @@ plot3(ax3, max_loc_FDI(1), max_loc_FDI(2), max_loc_FDI(3)+1, 'w.', MarkerSize=10
 plot3(ax3, max_loc_ADM(1), max_loc_ADM(2), max_loc_ADM(3)+1, 'wx', MarkerSize=10, LineWidth=2)
 
 exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/R2-Figures/%s_%s_%s_localization%s.png', ID, hemisphere, metric, suffix))
-
-% Note spots in overview table
-update_spots(ID, 'ini', hemisphere, 'APB', 'hot', max_loc_APB(1), max_loc_APB(2), max_loc_APB(3), maxR2_APB)
-update_spots(ID, 'ini', hemisphere, 'FDI', 'hot', max_loc_FDI(1), max_loc_FDI(2), max_loc_FDI(3), maxR2_FDI)
-update_spots(ID, 'ini', hemisphere, 'ADM', 'hot', max_loc_ADM(1), max_loc_ADM(2), max_loc_ADM(3), maxR2_ADM)
 
 
 

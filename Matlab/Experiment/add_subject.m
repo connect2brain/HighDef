@@ -1,6 +1,11 @@
 rng('shuffle')
-PATH = '//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx';
-T = readtable(PATH);
+%PATH = '//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx';
+PATH = 'C:/Users/BNP Lab/Documents/HighDef-temp/Planning.csv';
+if isfile(PATH)
+    T = readtable(PATH);
+else
+    T = [];
+end
 
 
 ID = input('Specify subject ID\n > ', 's');

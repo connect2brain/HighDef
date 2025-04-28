@@ -102,7 +102,8 @@ save(sprintf('%s/sub-%s_sihi_curve_R2L_SITS-%d-%s.mat', OUT, SUBJECT, intensityS
 
 
 %% Blocks
-T = readtable('//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx');
+%T = readtable('//storage.neurologie.uni-tuebingen.de/bbnp_lab/Experimental Data/2023-01 HighDef/Conventional/Planning.xlsx');
+T = readtable('C:/Users/BNP Lab/Documents/HighDef-temp/Planning.csv');
 subjectRow = T(strcmpi(T.Subject, ID), :);
 
 assert(size(subjectRow, 1) == 1)
@@ -113,12 +114,16 @@ if strcmpi(subjectRow.x1st_initiation{:}, 'R')
     channel_2nd = 1;
     intensity_1st = intensityRight;
     intensity_2nd = intensityLeft;
+    stimulator_1st = stimulators.right;
+    stimulator_2nd = stimulators.left;
 else
     fprintf('Beginning with mapping of Left hemisphere!\n')
     channel_1st = 1;
     channel_2nd = 2;
     intensity_1st = intensityLeft;
     intensity_2nd = intensityRight;
+    stimulator_1st = stimulators.left;
+    stimulator_2nd = stimulators.right;
 end
 
 intensity_1st = min([100 intensity_1st]);
@@ -144,7 +149,7 @@ while iBlock1st <= nBlocks
     pause(10) % get ready to map with conditioning pulse!
 
     % Run block
-    runBlock(bd, times, channels, markers, stimulators.left, stimulators.right, intensity_1st, intensity_2nd)
+    runBlock(bd, times, channels, markers, stimulator_1st, stimulator_2nd, intensity_1st, intensity_2nd)
 
     
     iBlock1st = iBlock1st + 1;    
@@ -166,7 +171,7 @@ while iBlock2nd <= nBlocks
     pause(10) % get ready to map with conditioning pulse!
 
     % Run block
-    runBlock(bd, times, channels, markers, stimulators.left, stimulators.right, intensity_1st, intensity_2nd)
+    runBlock(bd, times, channels, markers, stimulator_1st, stimulator_2nd, intensity_1st, intensity_2nd)
 
     
     iBlock2nd = iBlock2nd + 1;    

@@ -1,0 +1,12 @@
+python TMS_localization/simulate_FWHM_focality.py -s sub-001 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-001 -e map-L2R -o CsE_FDI_in_uV
+python TMS_localization/simulate_FWHM_focality.py -s sub-002 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-002 -e map-L2R -o CsE_FDI_in_uV
+python TMS_localization/simulate_FWHM_focality.py -s sub-004 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-004 -e map-L2R -o CsE_FDI_in_uV
+python TMS_localization/simulate_FWHM_focality.py -s sub-006 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-006 -e map-L2R -o CsE_FDI_in_uV
+python TMS_localization/simulate_FWHM_focality.py -s sub-007 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-007 -e map-L2R -o CsE_FDI_in_uV
+python TMS_localization/simulate_FWHM_focality.py -s sub-008 -e map-L2R -o SIHIscore_FDI
+python TMS_localization/simulate_FWHM_focality.py -s sub-008 -e map-L2R -o CsE_FDI_in_uV

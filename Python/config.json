@@ -1,0 +1,6 @@
+{
+	"R2_rejection": {
+		"Cutoff_IQR_factor": 1.0,
+		"only_apply_if_best_R2_is_lower_than": 0.1
+	}
+}

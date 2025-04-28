@@ -1,6 +1,7 @@
 library(ggplot2)
+library(patchwork)
 
-df.raw <- read.csv("U:/home/bnplab-admin/TMS_localization/Figures/contrasts.csv")
+df.raw <- read.csv("D:/HighDef-operate/Figures/contrasts.csv")
 df <- data.frame(df.raw)
 df$Response[startsWith(df$Receiver, "+")] <- sqrt(sqrt(df.raw$Response[startsWith(df.raw$Receiver, "+")]))
 
@@ -13,11 +14,40 @@ df$Contrast <- gsub("\\+", "h", df$Contrast)
 df$Contrast <- gsub("\\-", "c", df$Contrast)
 df$Dominant <- ifelse(df$Hemisphere == "L", "dominant", "nondominant")
 df$Dominant[df$Subject == "sub-006"] <- ifelse(df$Hemisphere[df$Subject == "sub-006"] == "L", "nondominant", "dominant")
+df$Dominant[df$Subject == "sub-016"] <- ifelse(df$Hemisphere[df$Subject == "sub-016"] == "L", "nondominant", "dominant")
+df$Dominant[df$Subject == "sub-017"] <- ifelse(df$Hemisphere[df$Subject == "sub-017"] == "L", "nondominant", "dominant")
 
 # Example plots:
 # hot vs. cold on Left:
 (p <- ggplot(data=df[df$Receiver == "cFDI" & df$Hemisphere == "L",], aes(y=Response, fill=Coil, x=Subject)) + geom_boxplot())
 (p <- ggplot(data=df[df$Contrast == "hFDI_vs_cFDI" & df$Hemisphere == "L",], aes(y=Response, fill=Coil, x=Subject)) + geom_boxplot())
+
+
+df_only_sihi <- df[df$Contrast == "cFDI_vs_hFDI" & df$Dominant == "dominant",]
+df_only_sihi$Coil[df_only_sihi$Coil == "hFDI"] <- "on hotspot"
+df_only_sihi$Coil[df_only_sihi$Coil == "cFDI"] <- "on coldspot"
+df_only_sihi$Response <- exp(-df_only_sihi$Response)
+p.dom <- ggplot(data=df_only_sihi, aes(y=Response, fill=Coil, x=Subject)) + geom_boxplot() + scale_y_continuous(limits=c(0,3)) + scale_fill_manual(values = c("#0096ff", "#FF0000")) + ylab("SIHI") + ggtitle("A: Dominant hemisphere") + theme_bw() + theme(axis.text.x = element_text(angle = 45, vjust = 0.7, hjust=0.8))
+df_only_sihi <- df[df$Contrast == "cFDI_vs_hFDI" & df$Dominant == "nondominant",]
+df_only_sihi$Coil[df_only_sihi$Coil == "hFDI"] <- "on hotspot"
+df_only_sihi$Coil[df_only_sihi$Coil == "cFDI"] <- "on coldspot"
+df_only_sihi$Response <- exp(-df_only_sihi$Response)
+p.non <- ggplot(data=df_only_sihi, aes(y=Response, fill=Coil, x=Subject)) + geom_boxplot() + scale_y_continuous(limits=c(0,3)) + scale_fill_manual(values = c("#0096ff", "#FF0000")) + ylab("SIHI") + ggtitle("B: Nondominant hemisphere") + theme_bw() + theme(axis.text.x = element_text(angle = 45, vjust = 0.7, hjust=0.8))
+
+(p.dom / p.non)
+
+ggsave(
+  "B:/Projects/2023-01 HighDef/Results/Evaluation/posthoc_comparison_hotspot_coldspot.pdf",
+  plot = (p.dom / p.non),
+  scale = 1,
+  width = 20,
+  height = 17,
+  units = c("cm"),
+  dpi = 300,
+  limitsize = TRUE,
+  bg = NULL
+)
+
 
 (p <- ggplot(data=df[df$Contrast == "hAPB_vs_hFDI" & df$Hemisphere == "L",], aes(y=Response, fill=Coil, x=Subject)) + geom_boxplot())
 
@@ -57,7 +87,7 @@ compare.spots <- function(data, c1, c2, dominance) {
 
 spot.difference.confInt <- function(data, c1, c2, dominance) {
   mdl <- fit.contrast.model(data, c1, c2, dominance)
-  c.in <- intervals(mdl)
+  c.in <- intervals(mdl, which="fixed")
   name.c2 <- sprintf("Coil%s", c2)
   df <- data.frame("Contrast"  =c(sprintf("%s_vs_%s", c1, c2),sprintf("%s_vs_%s", c1, c2)),
                    "Hemisphere"=c(dominance, dominance),

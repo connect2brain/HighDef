@@ -1,4 +1,4 @@
-ID = 'sub-014';
+ID = 'sub-001';
 exp_id = 'R2L';
 hemisphere = exp_id(1);
 %mesh_id = sprintf('mesh%s_ur', hemisphere);
@@ -6,9 +6,12 @@ mesh_id = 'mesh0';
 
 muscle = 'FDI';
 
+basepath = "D:/HighDef-operate/HighDef"; % //wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef
+
 roi = sprintf('midlayer_%s', lower(hemisphere));
 %roi = sprintf('small_%s', lower(hemisphere));
-ROOT = sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s', ID, exp_id);
+%ROOT = sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/results/exp_map-%s', ID, exp_id);
+ROOT = sprintf('%s/%s/results/exp_map-%s', basepath, ID, exp_id);
 R2_PATH = sprintf('%s/r2/mesh_%s/roi_%s', ROOT, mesh_id, roi);
 simulation_result = sprintf('%s/electric_field/mesh_%s/roi_%s/e.hdf5', ROOT, mesh_id, roi);
 
@@ -21,9 +24,9 @@ IN_X = sprintf('%s/%s/sigmoid4', R2_PATH, excitationName);
 IN_I = sprintf('%s/%s/sigmoid4', R2_PATH, inhibitionName);
 
 if strcmpi(exp_id, 'L2R-plus-pi')
-    responses = readtable(sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/%s_map-%s_raw.csv', ID, ID, exp_id));
+    responses = readtable(sprintf('%s/%s/%s_map-%s_raw.csv', basepath, ID, ID, exp_id));
 else
-    responses = readtable(sprintf('//wsl.localhost/Ubuntu-22.04/home/bnplab-admin/TMS_localization/HighDef/%s/%s_%s_raw.csv', ID, ID, exp_id));
+    responses = readtable(sprintf('%s/%s/%s_%s_raw.csv', basepath, ID, ID, exp_id));
 end
 %
 
@@ -66,9 +69,7 @@ exportgraphics(fig, sprintf('B:/Projects/2023-01 HighDef/Results/R2-Figures/%s_%
 fprintf(' Distance between coldspot and hotspot: %.3f mm\n\n', sqrt(sum((max_loc_I - max_loc_X).^2)))
 
 
-% Note spots in overview table
-update_spots(ID, exp_id, hemisphere, muscle, 'hot', max_loc_X(1), max_loc_X(2), max_loc_X(3), maxR2_X)
-update_spots(ID, exp_id, hemisphere, muscle, 'cold', max_loc_I(1), max_loc_I(2), max_loc_I(3), maxR2_I)
+
 
 
 
@@ -84,6 +85,11 @@ intensityGroup = responses.Intensity_percentMSO ~= max(usedIntensities);
 figio = figure(Position=[150 400 1200 500]);
 
 CR_too_low = responses.(CR_name) < 40;
+% Block 8 was last ok block for subject 22; small break after, and had to
+% reapply EMG
+% CR_too_low = CR_too_low | responses.Block > 8;
+CR_too_low = CR_too_low | responses.Block <= 8;
+
 
 %figio = figure(Position=[150 0 1200 1200]);
 %subplot(2,2,1)

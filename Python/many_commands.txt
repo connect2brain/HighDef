@@ -1,0 +1,45 @@
+python TMS_localization/explore_project_to_avg.py -s sub-001 -e map-L2R -r small_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-001 -e map-L2R -r small_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-001 -e map-R2L -r small_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-001 -e map-R2L -r small_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-002 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-002 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-002 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-002 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-003 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-003 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-003 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-003 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-004 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-004 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-004 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-004 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-006 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-006 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-006 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-006 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-007 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-007 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-007 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-007 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-008 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-008 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-008 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-008 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+python TMS_localization/explore_project_to_avg.py -s sub-009 -e map-L2R -r midlayer_l -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-009 -e map-L2R -r midlayer_l -o SIHIscore_FDI -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-009 -e map-R2L -r midlayer_r -o CsE_FDI_in_uV -m mesh0
+python TMS_localization/explore_project_to_avg.py -s sub-009 -e map-R2L -r midlayer_r -o SIHIscore_FDI -m mesh0
+
+
+
+
+python TMS_localization/evaluate.py -f TMS_localization/HighDef/sub-012/sub-012.hdf5 -e map-R2L
+python TMS_localization/evaluate.py -f TMS_localization/HighDef/sub-014/sub-014.hdf5 -e map-R2L
